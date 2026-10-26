@@ -1,0 +1,14 @@
+# Build output
+build/
+bin/
+lib/
+
+# Test artifacts
+*.pcap
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*~
