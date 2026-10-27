@@ -112,7 +112,33 @@ Simulates a full **VoNR (5G EVS) → VoLTE (4G AMR-WB)** SDP offer/answer exchan
 
 ---
 
-## 4. Key Engineering Concepts
+## 4. How to Run the Tests & Inspect Output
+
+### Build the Project
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+cmake --build build -j$(nproc)
+```
+
+### Run Unit Tests (Lesson 03 only)
+```bash
+./build/tests/unit_tests --gtest_filter="*Sdp*"
+```
+
+### Run Standalone Demo
+```bash
+./build/apps/demo_03_sdp_negotiate
+```
+
+### Inspect Output in Wireshark / tcpdump
+```bash
+tcpdump -r output_03_sdp_negotiate.pcap -nvX
+```
+Wireshark dissects the frames into full `SIP INVITE` and `SIP 200 OK` packets with nested RFC 4566 Session Description Protocol structures showing each `m=`, `a=rtpmap`, and `a=fmtp` line decoded.
+
+---
+
+## 5. Key Engineering Concepts
 
 ### Dynamic Payload Type Assignment
 Codec payload type numbers in the range 96–127 are **dynamic** — negotiated per-session in SDP. The `a=rtpmap` attribute binds the dynamic number (e.g. `104`) to the codec name and clock rate (e.g. `AMR-WB/16000`). The Answerer must preserve the exact PT numbers from the Offer.
@@ -125,7 +151,7 @@ Per RFC 4566, each `a=fmtp:<pt>` line must immediately follow its corresponding 
 
 ---
 
-## 5. Wireshark Analysis
+## 6. Wireshark Analysis
 
 Open `output_03_sdp_negotiate.pcap` and verify:
 
@@ -145,7 +171,7 @@ tcpdump -r output_03_sdp_negotiate.pcap -nvX
 
 ---
 
-## 6. Test Cases (`test_03_sdp.cpp`)
+## 7. Test Cases (`test_03_sdp.cpp`)
 
 | Test | Description |
 |------|-------------|
@@ -158,7 +184,7 @@ tcpdump -r output_03_sdp_negotiate.pcap -nvX
 
 ---
 
-## 7. References
+## 8. References
 
 | Specification | Title |
 |--------------|-------|

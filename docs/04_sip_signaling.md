@@ -131,7 +131,33 @@ Simulates a complete **IMS VoLTE call** over real UDP loopback sockets:
 
 ---
 
-## 4. Key Engineering Concepts
+## 4. How to Run the Tests & Inspect Output
+
+### Build the Project
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+cmake --build build -j$(nproc)
+```
+
+### Run Unit Tests (Lesson 04 only)
+```bash
+./build/tests/unit_tests --gtest_filter="*Sip*"
+```
+
+### Run Standalone Demo
+```bash
+./build/apps/demo_04_sip_volte_call
+```
+
+### Inspect Output in Wireshark / tcpdump
+```bash
+tcpdump -r output_04_sip_volte_call.pcap -nvX
+```
+In Wireshark: navigate to **Telephony → VoIP Calls** to see the full graphical call flow diagram with all SIP transactions (REGISTER, INVITE, 180, 200 OK, ACK, BYE) on a single timeline.
+
+---
+
+## 5. Key Engineering Concepts
 
 ### SIP Transaction vs Dialog
 - A **Transaction** is a single Request + its responses (e.g. one INVITE + 100/180/200).
@@ -145,7 +171,7 @@ Every SIP proxy adds a `Via` header with a unique `branch` tag prefixed by `z9hG
 
 ---
 
-## 5. Wireshark Analysis
+## 6. Wireshark Analysis
 
 Open `output_04_sip_volte_call.pcap` and verify:
 
@@ -168,7 +194,7 @@ tcpdump -r output_04_sip_volte_call.pcap -nvX
 
 ---
 
-## 6. Test Cases (`test_04_sip.cpp`)
+## 7. Test Cases (`test_04_sip.cpp`)
 
 | Test | Description |
 |------|-------------|
@@ -183,7 +209,7 @@ tcpdump -r output_04_sip_volte_call.pcap -nvX
 
 ---
 
-## 7. References
+## 8. References
 
 | Specification | Title |
 |--------------|-------|

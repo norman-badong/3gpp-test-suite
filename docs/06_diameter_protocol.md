@@ -148,7 +148,33 @@ Simulates an **MME ↔ HSS** Diameter S6a exchange over a real TCP loopback sock
 
 ---
 
-## 4. Key Engineering Concepts
+## 4. How to Run the Tests & Inspect Output
+
+### Build the Project
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+cmake --build build -j$(nproc)
+```
+
+### Run Unit Tests (Lesson 06 only)
+```bash
+./build/tests/unit_tests --gtest_filter="*Diameter*"
+```
+
+### Run Standalone Demo
+```bash
+./build/apps/demo_06_diameter_s6a
+```
+
+### Inspect Output in Wireshark / tcpdump
+```bash
+tcpdump -r output_06_diameter_s6a.pcap -nv
+```
+In Wireshark: expand any Diameter frame to see the full AVP tree. Frame 4 (AIA) shows the nested `Authentication-Info → E-UTRAN-Vector → RAND / XRES / AUTN / KASME` structure fully decoded by the built-in Diameter dissector.
+
+---
+
+## 5. Key Engineering Concepts
 
 ### AVP 4-Byte Alignment Rule
 Every AVP's wire footprint must start on a 4-byte boundary. Padding bytes of value `0x00` are appended **after** the data but are **NOT** included in the AVP Length field:
@@ -169,7 +195,7 @@ The Diameter Result-Code `2001` (DIAMETER_SUCCESS) is the equivalent of HTTP `20
 
 ---
 
-## 5. Wireshark Analysis
+## 6. Wireshark Analysis
 
 Open `output_06_diameter_s6a.pcap` and verify:
 
@@ -190,7 +216,7 @@ tcpdump -r output_06_diameter_s6a.pcap -nv
 
 ---
 
-## 6. Test Cases (`test_06_diameter.cpp`)
+## 7. Test Cases (`test_06_diameter.cpp`)
 
 | Test | Description |
 |------|-------------|
@@ -205,7 +231,7 @@ tcpdump -r output_06_diameter_s6a.pcap -nv
 
 ---
 
-## 7. References
+## 8. References
 
 | Specification | Title |
 |--------------|-------|

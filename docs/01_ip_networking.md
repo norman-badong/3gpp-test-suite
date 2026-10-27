@@ -152,7 +152,33 @@ Demonstrates IPv4/IPv6/UDP/TCP on a loopback socket:
 
 ---
 
-## 4. Key Engineering Concepts
+## 4. How to Run the Tests & Inspect Output
+
+### Build the Project
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+cmake --build build -j$(nproc)
+```
+
+### Run Unit Tests (Lesson 01 only)
+```bash
+./build/tests/unit_tests --gtest_filter="*Ip*:*Socket*"
+```
+
+### Run Standalone Demo
+```bash
+./build/apps/demo_01_ip_echo
+```
+
+### Inspect Output in Wireshark / tcpdump
+```bash
+tcpdump -r output_01_ip_echo.pcap -nvX
+```
+Wireshark automatically recognizes the captured packets as standard Ethernet/IPv4/UDP and TCP frames with fully verified checksums.
+
+---
+
+## 5. Key Engineering Concepts
 
 ### RFC 1071 Checksum Algorithm
 The IPv4 header checksum (and UDP/TCP pseudo-header checksum) is a 16-bit one's complement sum of all 16-bit words. A correct receiver recomputes the sum over the entire header including the checksum field — the result must be `0xFFFF`.
@@ -169,7 +195,7 @@ IPv6 removes the per-hop header checksum (covered by link-layer CRC instead) to 
 
 ---
 
-## 5. Wireshark Analysis
+## 6. Wireshark Analysis
 
 Open `output_01_ip_echo.pcap` and verify:
 
@@ -189,7 +215,7 @@ tcpdump -r output_01_ip_echo.pcap -nvX
 
 ---
 
-## 6. Test Cases (`test_01_ip.cpp`)
+## 7. Test Cases (`test_01_ip.cpp`)
 
 | Test | Description |
 |------|-------------|
@@ -204,7 +230,7 @@ tcpdump -r output_01_ip_echo.pcap -nvX
 
 ---
 
-## 7. References
+## 8. References
 
 | Specification | Title |
 |--------------|-------|

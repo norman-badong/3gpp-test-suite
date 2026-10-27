@@ -126,7 +126,33 @@ Simulates a live **VoLTE voice session** over real UDP loopback sockets:
 
 ---
 
-## 4. Key Engineering Concepts
+## 4. How to Run the Tests & Inspect Output
+
+### Build the Project
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+cmake --build build -j$(nproc)
+```
+
+### Run Unit Tests (Lesson 05 only)
+```bash
+./build/tests/unit_tests --gtest_filter="*Rtp*:*Rtcp*:*Jitter*"
+```
+
+### Run Standalone Demo
+```bash
+./build/apps/demo_05_rtp_stream
+```
+
+### Inspect Output in Wireshark / tcpdump
+```bash
+tcpdump -r output_05_rtp_stream.pcap -nv
+```
+In Wireshark: go to **Telephony → RTP → RTP Streams** to see the AMR-WB stream summary. Filter `rtcp` to inspect SR and RR packets with jitter and loss statistics.
+
+---
+
+## 5. Key Engineering Concepts
 
 ### Statistical Jitter Estimation (RFC 3550 Appendix A.8)
 For two consecutive packets $i-1$ and $i$, let $S_i$ be the RTP send timestamp and $R_i$ be the arrival time in the same clock units:
@@ -145,7 +171,7 @@ The RTP `M` bit is set to `1` on the **first RTP packet following a period of si
 
 ---
 
-## 5. Wireshark Analysis
+## 6. Wireshark Analysis
 
 Open `output_05_rtp_stream.pcap` and verify:
 
@@ -167,7 +193,7 @@ tcpdump -r output_05_rtp_stream.pcap -nv
 
 ---
 
-## 6. Test Cases (`test_05_rtp.cpp`)
+## 7. Test Cases (`test_05_rtp.cpp`)
 
 | Test | Description |
 |------|-------------|
@@ -181,7 +207,7 @@ tcpdump -r output_05_rtp_stream.pcap -nv
 
 ---
 
-## 7. References
+## 8. References
 
 | Specification | Title |
 |--------------|-------|

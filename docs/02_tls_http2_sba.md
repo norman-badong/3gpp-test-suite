@@ -129,7 +129,33 @@ Simulates an **AMF → NRF** 5G SBI registration over a real TLS 1.3 loopback:
 
 ---
 
-## 4. Key Engineering Concepts
+## 4. How to Run the Tests & Inspect Output
+
+### Build the Project
+```bash
+cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+cmake --build build -j$(nproc)
+```
+
+### Run Unit Tests (Lesson 02 only)
+```bash
+./build/tests/unit_tests --gtest_filter="*Http2*:*Hpack*:*Sba*"
+```
+
+### Run Standalone Demo
+```bash
+./build/apps/demo_02_sba_http2
+```
+
+### Inspect Output in Wireshark / tcpdump
+```bash
+tcpdump -r output_02_sba_http2.pcap -nvX
+```
+Wireshark dissects the TLS Application Data frames and shows HTTP/2 HEADERS and DATA frames with decoded HPACK pseudo-headers and JSON body.
+
+---
+
+## 5. Key Engineering Concepts
 
 ### ALPN — Application-Layer Protocol Negotiation
 ALPN (RFC 7301) is a TLS extension that allows the client to list supported application protocols (`h2`, `http/1.1`) in the ClientHello. The server selects one and confirms in its EncryptedExtensions. This eliminates the need for an extra round-trip to upgrade from HTTP/1.1 to HTTP/2.
@@ -142,7 +168,7 @@ All HTTP/2 requests and responses share a single TLS connection as independent s
 
 ---
 
-## 5. Wireshark Analysis
+## 6. Wireshark Analysis
 
 Open `output_02_sba_http2.pcap` and verify:
 
@@ -165,7 +191,7 @@ tcpdump -r output_02_sba_http2.pcap -nvX
 
 ---
 
-## 6. Test Cases (`test_02_sba_http2.cpp`)
+## 7. Test Cases (`test_02_sba_http2.cpp`)
 
 | Test | Description |
 |------|-------------|
@@ -178,7 +204,7 @@ tcpdump -r output_02_sba_http2.pcap -nvX
 
 ---
 
-## 7. References
+## 8. References
 
 | Specification | Title |
 |--------------|-------|
