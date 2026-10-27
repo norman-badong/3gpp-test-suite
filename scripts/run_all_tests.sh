@@ -21,10 +21,16 @@ echo "=== Running Lesson 2 Demo App (5G SBA TLS 1.3 + HTTP/2) ==="
 (cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_02_sba_http2")
 
 echo ""
+echo "=== Running Lesson 3 Demo App (VoLTE / VoNR SDP Offer/Answer) ==="
+(cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_03_sdp_negotiate")
+
+echo ""
 echo "=== Verifying Generated PCAPs with tcpdump ==="
 echo "--- output_01_ip_echo.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_01_ip_echo.pcap" -c 2 -nv
 echo "--- output_02_sba_http2.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_02_sba_http2.pcap" -c 4 -nv
+echo "--- output_03_sdp_negotiate.pcap ---"
+tcpdump -r "${PROJECT_ROOT}/output_03_sdp_negotiate.pcap" -c 2 -nv
 echo ""
 echo ">>> All checks passed successfully! <<<"

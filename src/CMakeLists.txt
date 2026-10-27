@@ -14,6 +14,8 @@ add_library(3gpp_core STATIC
     sba/Hpack.cpp
     sba/TlsSocket.cpp
     sba/SbaSession.cpp
+    sdp/Sdp.cpp
+    sdp/SdpNegotiator.cpp
 )
 
 target_include_directories(3gpp_core PUBLIC
