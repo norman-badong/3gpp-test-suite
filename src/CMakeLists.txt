@@ -10,6 +10,10 @@ add_library(3gpp_core STATIC
     ip/UdpPacket.cpp
     ip/TcpPacket.cpp
     ip/Socket.cpp
+    sba/Http2Frame.cpp
+    sba/Hpack.cpp
+    sba/TlsSocket.cpp
+    sba/SbaSession.cpp
 )
 
 target_include_directories(3gpp_core PUBLIC

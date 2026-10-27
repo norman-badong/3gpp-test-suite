@@ -39,7 +39,7 @@ Each lesson follows a strict **Two-Phase Strategy**:
 | # | Topic | Key Specifications | Status |
 | :---: | :--- | :--- | :---: |
 | **01** | **IP Networking** | RFC 791 (IPv4), RFC 8200 (IPv6), RFC 768 (UDP), RFC 793 (TCP) | **Completed** |
-| **02** | **TLS + HTTP/2** | RFC 8446 (TLS 1.3), RFC 7540 / RFC 9113 (HTTP/2), 3GPP TS 29.500 | Planned |
+| **02** | **TLS + HTTP/2** | RFC 8446 (TLS 1.3), RFC 7540 / RFC 9113 (HTTP/2), 3GPP TS 29.500 | **Completed** |
 | **03** | **SDP** | RFC 4566, RFC 3264 (Offer/Answer model, AMR/EVS codecs) | Planned |
 | **04** | **SIP Signaling** | RFC 3261, RFC 3262 (IMS VoLTE/VoNR Call Flow) | Planned |
 | **05** | **RTP / RTCP** | RFC 3550, RFC 3551 (Voice Media Transport & QoS) | Planned |
