@@ -25,6 +25,10 @@ echo "=== Running Lesson 3 Demo App (VoLTE / VoNR SDP Offer/Answer) ==="
 (cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_03_sdp_negotiate")
 
 echo ""
+echo "=== Running Lesson 4 Demo App (VoLTE / VoNR SIP IMS Signaling) ==="
+(cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_04_sip_volte_call")
+
+echo ""
 echo "=== Verifying Generated PCAPs with tcpdump ==="
 echo "--- output_01_ip_echo.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_01_ip_echo.pcap" -c 2 -nv
@@ -32,5 +36,7 @@ echo "--- output_02_sba_http2.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_02_sba_http2.pcap" -c 4 -nv
 echo "--- output_03_sdp_negotiate.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_03_sdp_negotiate.pcap" -c 2 -nv
+echo "--- output_04_sip_volte_call.pcap ---"
+tcpdump -r "${PROJECT_ROOT}/output_04_sip_volte_call.pcap" -c 4 -nv
 echo ""
 echo ">>> All checks passed successfully! <<<"

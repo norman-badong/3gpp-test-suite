@@ -18,3 +18,10 @@ add_executable(demo_03_sdp_negotiate
 target_link_libraries(demo_03_sdp_negotiate PRIVATE
     3gpp_core
 )
+
+add_executable(demo_04_sip_volte_call
+    demo_04_sip_volte_call.cpp
+)
+target_link_libraries(demo_04_sip_volte_call PRIVATE
+    3gpp_core
+)

@@ -69,6 +69,11 @@ jobs:
           ./build/apps/demo_03_sdp_negotiate
           tcpdump -r output_03_sdp_negotiate.pcap -nv -c 2
 
+      - name: Execute Lesson 4 Demo (VoLTE / VoNR SIP IMS Signaling)
+        run: |
+          ./build/apps/demo_04_sip_volte_call
+          tcpdump -r output_04_sip_volte_call.pcap -nv -c 4
+
       - name: Upload Wireshark PCAP Traces
         uses: actions/upload-artifact@v4
         if: matrix.compiler == 'gcc' && matrix.build_type == 'Debug'
@@ -78,4 +83,5 @@ jobs:
             output_01_ip_echo.pcap
             output_02_sba_http2.pcap
             output_03_sdp_negotiate.pcap
+            output_04_sip_volte_call.pcap
           retention-days: 14

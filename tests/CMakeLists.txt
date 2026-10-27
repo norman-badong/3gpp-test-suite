@@ -2,6 +2,7 @@ add_executable(unit_tests
     test_01_ip.cpp
     test_02_sba_http2.cpp
     test_03_sdp.cpp
+    test_04_sip.cpp
 )
 
 target_link_libraries(unit_tests PRIVATE

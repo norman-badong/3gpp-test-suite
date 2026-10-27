@@ -16,6 +16,10 @@ add_library(3gpp_core STATIC
     sba/SbaSession.cpp
     sdp/Sdp.cpp
     sdp/SdpNegotiator.cpp
+    sip/SipUri.cpp
+    sip/SipHeader.cpp
+    sip/SipMessage.cpp
+    sip/SipDialog.cpp
 )
 
 target_include_directories(3gpp_core PUBLIC
