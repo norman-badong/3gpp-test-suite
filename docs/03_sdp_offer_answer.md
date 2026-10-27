@@ -1,79 +1,172 @@
 # Lesson 03: SDP (Session Description Protocol) & Offer/Answer Model
 
-## 1. 3GPP Relevance & Architecture Context
+## Overview
 
-In **VoLTE (4G Voice over LTE)** and **VoNR (5G Voice over New Radio)**, media sessions are established within the **IP Multimedia Subsystem (IMS)**.
+**SDP (Session Description Protocol)** is the negotiation language used by VoLTE and VoNR UEs to agree on the audio codec, RTP port, direction, and media parameters before voice media begins flowing. It is not a standalone protocol — SDP is always **carried as the body inside SIP messages** (INVITE / 200 OK).
 
-While SIP (Lesson 04) handles the signaling exchange between the User Equipment (UE) and the P-CSCF (Proxy-Call Session Control Function), SIP delegates media capability negotiation to **SDP (Session Description Protocol)** carried inside the SIP body:
+This lesson covers:
+- **RFC 4566**: SDP syntax — `v=`, `o=`, `s=`, `c=`, `t=`, `m=`, `a=` line types
+- **RFC 3264**: Bidirectional Offer/Answer model — codec matching, port rejection, direction negotiation
+- **3GPP TS 26.114**: Mandatory codec profiles for IMS Multimedia Telephony (EVS, AMR-WB, AMR)
 
-- **RFC 4566:** Defines the SDP syntax (`v=`, `o=`, `s=`, `c=`, `t=`, `m=`, `a=`).
-- **RFC 3264:** Defines the bidirectional **Offer/Answer Model**:
-  - The caller sends an **SDP Offer** specifying supported codecs, dynamic payload types, and receiving RTP ports.
-  - The callee responds with an **SDP Answer** selecting matching codecs and binding its own receiving RTP port.
-- **3GPP TS 26.114:** Specifies mandatory codecs for IMS Multimedia Telephony:
-  - **EVS (Enhanced Voice Services, TS 26.441):** Primary HD/super-wideband codec for 5G VoNR.
-  - **AMR-WB (Adaptive Multi-Rate Wideband, G.722.2):** Mandatory HD codec for 4G VoLTE.
-  - **AMR (Narrowband):** Standard legacy cellular voice codec.
-  - **telephone-event:** RFC 4733 DTMF dual-tone multi-frequency signaling.
+### 3GPP Context
+
+| Interface | Between | SDP Role |
+|-----------|---------|---------|
+| **Gm (IMS)** | UE ↔ P-CSCF | SDP carried inside SIP INVITE / 200 OK |
+| **VoLTE (4G)** | Caller UE ↔ Callee UE | AMR-WB mandatory codec, PT=104 |
+| **VoNR (5G)** | Caller UE ↔ Callee UE | EVS primary codec, AMR-WB fallback |
+| **WebRTC / IMS** | Browser / App ↔ IMS | SDP for codec interoperability |
+
+---
+
+## 1. Protocol Structure
+
+### SDP Syntax (RFC 4566)
+
+SDP is a text-based format. Each line is `<type>=<value>\r\n` with fixed ordering:
+
+```
+v=0
+o=- 1700000000 1 IN IP4 192.168.1.10
+s=3GPP VoLTE Call
+c=IN IP4 192.168.1.10
+t=0 0
+m=audio 49170 RTP/AVP 104 101
+a=rtpmap:104 AMR-WB/16000
+a=fmtp:104 octet-align=1;mode-change-capability=2
+a=rtpmap:101 telephone-event/8000
+a=fmtp:101 0-15
+a=sendrecv
+```
+
+### Key SDP Field Reference
+
+| Line | Name | 3GPP VoLTE/VoNR Significance |
+|------|------|------------------------------|
+| `v=0` | Protocol Version | Always `0` per RFC 4566 |
+| `o=` | Origin | Unique session ID and version for tracking |
+| `s=` | Session Name | Human-readable session title |
+| `c=` | Connection Data | Media destination endpoint (`IN IP4` or `IN IP6`) |
+| `t=` | Timing | `0 0` for non-bounded (indefinite) calls |
+| `m=` | Media Description | Type, RTP port, transport, payload type list |
+| `a=rtpmap` | RTP Map | Binds payload type number to codec name and clock rate |
+| `a=fmtp` | Format Parameters | Codec-specific config (e.g. `octet-align=1`, `br=13.2-24.4`) |
+| `a=sendrecv` | Direction | `sendrecv` / `sendonly` / `recvonly` / `inactive` |
+| `a=maxptime` | Max Packet Time | Maximum RTP packet duration in ms (typically 40ms) |
+
+---
+
+## 2. 3GPP Protocol Flow
+
+### VoNR → VoLTE Cross-Codec Negotiation
 
 ```
        Caller (5G VoNR UE)                     Callee (4G VoLTE UE)
                |                                        |
-               | --- SIP INVITE (SDP Offer: EVS,AMR) -> |
-               |     [m=audio 49170 RTP/AVP 108 104]    |
+               | --- SIP INVITE (SDP Offer)          -> |
+               |     m=audio 49170 RTP/AVP 108 104 101  |
+               |     a=rtpmap:108 EVS/16000              |
+               |     a=rtpmap:104 AMR-WB/16000           |
+               |     a=rtpmap:101 telephone-event/8000   |
                |                                        |
-               | <-- SIP 200 OK (SDP Answer: AMR-WB) -- |
-               |     [m=audio 50004 RTP/AVP 104]        |
+               | <- SIP 200 OK (SDP Answer)          -- |
+               |     m=audio 50004 RTP/AVP 104 101      |
+               |     a=rtpmap:104 AMR-WB/16000           |
+               |     a=rtpmap:101 telephone-event/8000   |
                |                                        |
-               | <====== Bi-directional RTP Voice =====>|
-               |     (Sent to Negotiated Ports)         |
+               | <====== Bi-directional RTP Audio ====> |
+               |     (AMR-WB PT=104, to negotiated ports)|
 ```
+
+### RFC 3264 Offer/Answer Negotiation Rules
+
+| Rule | Behaviour |
+|------|-----------|
+| **Codec Matching** | Answerer selects matching codecs using the **same payload type numbers** from the Offer |
+| **Port Rejection** | If no common voice codec exists, Answerer sets `port=0` to reject the media line |
+| **Direction** | `sendrecv` Offer → Answerer may reply with `sendrecv`, `sendonly`, `recvonly`, or `inactive` |
+| **Hold** | `sendonly` Offer (call hold) → Answerer MUST reply with `recvonly` |
+| **DTMF** | `telephone-event` (RFC 4733) only included in Answer if at least one voice codec matched |
 
 ---
 
-## 2. Key SDP Fields & Attributes Implemented
+## 3. Project Implementation
 
-| Line | Name | 3GPP VoLTE/VoNR Significance |
-| :--- | :--- | :--- |
-| `v=0` | Protocol Version | Always 0 per RFC 4566. |
-| `o=` | Owner / Creator | Unique session ID and version for session tracking. |
-| `s=` | Session Name | Session title (e.g. `3GPP VoLTE Call`). |
-| `c=` | Connection Data | Media destination endpoint (`IN IP4 <ip>` or `IN IP6 <ip>`). |
-| `t=` | Time Active | Start and stop times (`0 0` for non-bounded calls). |
-| `m=` | Media Description | Media type (`audio`), RTP receiving port, transport protocol (`RTP/AVP`), and format list. |
-| `a=rtpmap` | Dynamic Payload Type | Binds payload numbers to codec names and clock rates (e.g. `104 AMR-WB/16000`). |
-| `a=fmtp` | Format Parameters | Codec-specific properties (e.g. `octet-align=1`, `mode-change-capability=2`, `br=13.2-24.4; bw=wb-swb`). |
-| `a=sendrecv` | Direction Attribute | Bidirectional voice (`sendrecv`), Call hold (`sendonly` / `recvonly`), or Mute (`inactive`). |
+### Source Files
 
----
+| File | Description |
+|------|-------------|
+| `include/3gpp/sdp/Sdp.hpp` | RFC 4566 parser and generator; VoLTE AMR-WB and VoNR EVS offer factories |
+| `include/3gpp/sdp/SdpNegotiator.hpp` | RFC 3264 codec matching, port-zero rejection, direction negotiation |
 
-## 3. Offer/Answer Negotiation Rules (RFC 3264)
+### Demo Scenario — `demo_03_sdp_negotiate.cpp`
 
-1. **Codec Matching:**
-   - The Answerer must pick matching codecs and keep the same dynamic payload type numbers offered by the Caller.
-   - If no common voice codec can be agreed upon, the media stream is rejected by setting the port to `0` (`m=audio 0 RTP/AVP ...`).
-2. **Direction Negotiation:**
-   - `sendrecv` in Offer $\rightarrow$ Answerer can accept as `sendrecv`, `sendonly`, `recvonly`, or `inactive`.
-   - `sendonly` in Offer (e.g. Caller puts call on hold) $\rightarrow$ Answerer MUST reply with `recvonly`.
-3. **DTMF Signaling:**
-   - `telephone-event` (RFC 4733) is negotiated alongside audio codecs so in-band DTMF keys are transmitted reliably over RTP.
+Simulates a full **VoNR (5G EVS) → VoLTE (4G AMR-WB)** SDP offer/answer exchange:
+
+1. **SDP Offer** — 5G caller generates offer: EVS (PT=108) + AMR-WB (PT=104) + telephone-event
+2. **SDP Answer** — 4G callee negotiator selects AMR-WB (PT=104) only (no EVS support)
+3. **Direction** — Both sides agree on `sendrecv`
+4. **DTMF** — `telephone-event` retained since AMR-WB matched
+5. Both messages serialized and captured to `output_03_sdp_negotiate.pcap`
 
 ---
 
-## 4. How to Run the Tests & Inspect Output
+## 4. Key Engineering Concepts
 
-### Run Unit Tests
-```bash
-./build/tests/unit_tests --gtest_filter="*Sdp*"
+### Dynamic Payload Type Assignment
+Codec payload type numbers in the range 96–127 are **dynamic** — negotiated per-session in SDP. The `a=rtpmap` attribute binds the dynamic number (e.g. `104`) to the codec name and clock rate (e.g. `AMR-WB/16000`). The Answerer must preserve the exact PT numbers from the Offer.
+
+### Strict `rtpmap` + `fmtp` Pairing
+Per RFC 4566, each `a=fmtp:<pt>` line must immediately follow its corresponding `a=rtpmap:<pt>` to preserve ordered association. A parser that separates them will break parameter lookup for multi-codec sessions.
+
+### EVS Codec (Enhanced Voice Services)
+3GPP TS 26.441 defines EVS as the successor to AMR-WB for 5G VoNR, supporting bitrates from 5.9 kbps to 128 kbps and super-wideband (SWB, 14 kHz) / fullband (FB, 20 kHz) audio. The SDP `a=fmtp` for EVS uses `br=` (bitrate range) and `bw=` (bandwidth mode) parameters.
+
+---
+
+## 5. Wireshark Analysis
+
+Open `output_03_sdp_negotiate.pcap` and verify:
+
+```
+Frame 1: 192.168.1.10 → 192.168.1.1   SIP INVITE  [SDP Offer: EVS + AMR-WB + telephone-event]
+Frame 2: 192.168.1.1  → 192.168.1.10  SIP 200 OK  [SDP Answer: AMR-WB only, sendrecv]
 ```
 
-### Run Standalone Demo
-```bash
-./build/apps/demo_03_sdp_negotiate
-```
+In Wireshark: expand the SIP message → `Message body` → `Session Description Protocol`:
+- Confirm `m=audio 49170 RTP/AVP 108 104 101` in the Offer
+- Confirm `m=audio 50004 RTP/AVP 104 101` in the Answer (EVS PT=108 absent)
+- Check `a=fmtp:104 octet-align=1` on the Answer codec parameters
 
-### Inspect Output in Wireshark / tcpdump
 ```bash
 tcpdump -r output_03_sdp_negotiate.pcap -nvX
 ```
-Wireshark dissects the frames into full `SIP INVITE` and `SIP 200 OK` packets with nested RFC 4566 Session Description Protocol structures.
+
+---
+
+## 6. Test Cases (`test_03_sdp.cpp`)
+
+| Test | Description |
+|------|-------------|
+| `SdpTest.RtpMapAndFmtpParsing` | Parse `a=rtpmap` and `a=fmtp` lines and verify codec binding |
+| `SdpTest.VoLteOfferGeneration` | Factory generates correct VoLTE AMR-WB SDP offer structure |
+| `SdpTest.ParseAndSerializeRoundTrip` | Full SDP parse → serialize preserves all fields and ordering |
+| `SdpNegotiationTest.MatchedCodecSelection` | Answerer selects AMR-WB from multi-codec EVS+AMR-WB offer |
+| `SdpNegotiationTest.IncompatibleCodecRejection` | No common codec → Answer sets `port=0` |
+| `SdpNegotiationTest.DirectionNegotiation` | `sendonly` offer → Answerer must reply `recvonly` |
+
+---
+
+## 7. References
+
+| Specification | Title |
+|--------------|-------|
+| **RFC 4566** | SDP: Session Description Protocol |
+| **RFC 3264** | An Offer/Answer Model with SDP |
+| **RFC 4867** | RTP Payload Format and File Storage Format for AMR and AMR-WB |
+| **RFC 4733** | RTP Payload for DTMF Digits, Telephony Tones and Signals |
+| **3GPP TS 26.114** | Media Handling and Interaction for IMS Multimedia Telephony |
+| **3GPP TS 26.441** | Codec for Enhanced Voice Services (EVS) |
+| **3GPP TS 26.201** | Speech Codec Speech Processing Functions — AMR-WB |
+| **3GPP TS 24.229** | IP Multimedia Call Control Protocol Based on SIP and SDP |
