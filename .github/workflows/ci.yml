@@ -74,6 +74,11 @@ jobs:
           ./build/apps/demo_04_sip_volte_call
           tcpdump -r output_04_sip_volte_call.pcap -nv -c 4
 
+      - name: Execute Lesson 5 Demo (VoLTE / VoNR RTP & RTCP Voice Streaming)
+        run: |
+          ./build/apps/demo_05_rtp_stream
+          tcpdump -r output_05_rtp_stream.pcap -nv -c 4
+
       - name: Upload Wireshark PCAP Traces
         uses: actions/upload-artifact@v4
         if: matrix.compiler == 'gcc' && matrix.build_type == 'Debug'
@@ -84,4 +89,5 @@ jobs:
             output_02_sba_http2.pcap
             output_03_sdp_negotiate.pcap
             output_04_sip_volte_call.pcap
+            output_05_rtp_stream.pcap
           retention-days: 14

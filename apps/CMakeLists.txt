@@ -25,3 +25,10 @@ add_executable(demo_04_sip_volte_call
 target_link_libraries(demo_04_sip_volte_call PRIVATE
     3gpp_core
 )
+
+add_executable(demo_05_rtp_stream
+    demo_05_rtp_stream.cpp
+)
+target_link_libraries(demo_05_rtp_stream PRIVATE
+    3gpp_core
+)

@@ -20,6 +20,9 @@ add_library(3gpp_core STATIC
     sip/SipHeader.cpp
     sip/SipMessage.cpp
     sip/SipDialog.cpp
+    rtp/RtpPacket.cpp
+    rtp/RtcpPacket.cpp
+    rtp/JitterEstimator.cpp
 )
 
 target_include_directories(3gpp_core PUBLIC
