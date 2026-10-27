@@ -1,0 +1,81 @@
+name: 3GPP Test Suite CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.compiler }} - ${{ matrix.build_type }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [gcc, clang]
+        build_type: [Debug, Release]
+        include:
+          - compiler: gcc
+            cc: gcc
+            cxx: g++
+          - compiler: clang
+            cc: clang
+            cxx: clang++
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build libssl-dev tcpdump
+
+      - name: Configure CMake
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: |
+          cmake -B build -S . \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_CXX_STANDARD=20
+
+      - name: Build All Targets
+        run: |
+          cmake --build build -j$(nproc)
+
+      - name: Run Unit Tests
+        run: |
+          ctest --test-dir build --output-on-failure --verbose
+
+      - name: Execute Lesson 1 Demo (IP Networking)
+        run: |
+          ./build/apps/demo_01_ip_echo
+          tcpdump -r output_01_ip_echo.pcap -nv -c 2
+
+      - name: Execute Lesson 2 Demo (5G SBA TLS 1.3 + HTTP/2)
+        run: |
+          ./build/apps/demo_02_sba_http2
+          tcpdump -r output_02_sba_http2.pcap -nv -c 4
+
+      - name: Execute Lesson 3 Demo (VoLTE / VoNR SDP Offer/Answer)
+        run: |
+          ./build/apps/demo_03_sdp_negotiate
+          tcpdump -r output_03_sdp_negotiate.pcap -nv -c 2
+
+      - name: Upload Wireshark PCAP Traces
+        uses: actions/upload-artifact@v4
+        if: matrix.compiler == 'gcc' && matrix.build_type == 'Debug'
+        with:
+          name: wireshark-pcap-traces
+          path: |
+            output_01_ip_echo.pcap
+            output_02_sba_http2.pcap
+            output_03_sdp_negotiate.pcap
+          retention-days: 14

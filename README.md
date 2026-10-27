@@ -1,5 +1,7 @@
 # 3GPP Test Suite
 
+[![3GPP Test Suite CI/CD](https://github.com/norman-badong/3gpp-test-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/norman-badong/3gpp-test-suite/actions/workflows/ci.yml)
+
 A training framework and protocol test suite written in **Modern C++ (C++20)** to master, implement, and verify 3GPP cellular and multimedia protocols (4G LTE, 5G NR, IMS VoLTE/VoNR, and EPC/5GC Core).
 
 Designed to run on any POSIX-compliant environment: x86/ARM Linux servers, Raspberry Pi, Android terminals (via Termux/ADB), Docker, or emulators.
@@ -79,3 +81,12 @@ Inspect the generated Wireshark trace:
 ```bash
 tcpdump -r output_01_ip_echo.pcap -nvX
 ```
+
+---
+
+## Continuous Integration & Automated Conformance (CI/CD)
+
+The project includes an enterprise-grade GitHub Actions pipeline ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)):
+- **Multi-Compiler Matrix:** Automatically compiles and verifies across both **GCC** (`g++`) and **Clang** (`clang++`) in **Debug** and **Release** modes.
+- **Protocol Conformance:** Runs all GoogleTest unit suites and verifies zero regressions.
+- **PCAP Artifact Publishing:** Runs demo applications, verifies packet headers via `tcpdump`, and uploads Wireshark-compatible PCAP traces as downloadable GitHub artifacts on every push.
