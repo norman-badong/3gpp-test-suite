@@ -2,13 +2,30 @@
 build/
 bin/
 lib/
+*.o
+*.a
+*.so
+*.dylib
 
-# Test artifacts
+# Test and run artifacts
 *.pcap
 *.log
+*.tmp
+core
 
-# IDE files
+# Security / Credentials / Certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.csr
+.env
+.env.*
+
+# IDE and Editor files
 .vscode/
 .idea/
 *.swp
+*.swo
 *~
+.DS_Store
