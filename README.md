@@ -45,8 +45,7 @@ Each lesson follows a strict **Two-Phase Strategy**:
 | **03** | **SDP** | RFC 4566, RFC 3264 (Offer/Answer model, AMR/EVS codecs) | **Completed** |
 | **04** | **SIP Signaling** | RFC 3261, RFC 3262 (IMS VoLTE/VoNR Call Flow) | **Completed** |
 | **05** | **RTP / RTCP** | RFC 3550, RFC 3551 (Voice Media Transport & QoS) | **Completed** |
-| **06** | **Diameter** | RFC 6733, RFC 4006, 3GPP TS 29.272 (S6a, Gx/Gy) | Planned |
-| **06** | **Diameter** | RFC 6733, RFC 4006, 3GPP TS 29.272 (S6a, Gx/Gy) | Planned |
+| **06** | **Diameter** | RFC 6733, RFC 4006, 3GPP TS 29.272 (S6a, Gx/Gy) | **Completed** |
 | **07** | **LTE Attach / NAS** | 3GPP TS 23.401, TS 24.301 (EMM & ESM) | Planned |
 | **08** | **5G Registration** | 3GPP TS 23.502, TS 24.501 (5GMM & 5GSM) | Planned |
 | **09** | **LTE / NR RRC** | 3GPP TS 36.331, TS 38.331 (ASN.1 APER Radio Signaling) | Planned |

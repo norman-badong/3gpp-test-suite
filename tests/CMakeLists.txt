@@ -4,6 +4,7 @@ add_executable(unit_tests
     test_03_sdp.cpp
     test_04_sip.cpp
     test_05_rtp.cpp
+    test_06_diameter.cpp
 )
 
 target_link_libraries(unit_tests PRIVATE

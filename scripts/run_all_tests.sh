@@ -33,6 +33,10 @@ echo "=== Running Lesson 5 Demo App (VoLTE / VoNR RTP & RTCP Voice Streaming) ==
 (cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_05_rtp_stream")
 
 echo ""
+echo "=== Running Lesson 6 Demo App (Diameter S6a LTE EPC Authentication) ==="
+(cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_06_diameter_s6a")
+
+echo ""
 echo "=== Verifying Generated PCAPs with tcpdump ==="
 echo "--- output_01_ip_echo.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_01_ip_echo.pcap" -c 2 -nv
@@ -44,5 +48,7 @@ echo "--- output_04_sip_volte_call.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_04_sip_volte_call.pcap" -c 4 -nv
 echo "--- output_05_rtp_stream.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_05_rtp_stream.pcap" -c 4 -nv
+echo "--- output_06_diameter_s6a.pcap ---"
+tcpdump -r "${PROJECT_ROOT}/output_06_diameter_s6a.pcap" -c 6 -nv
 echo ""
 echo ">>> All checks passed successfully! <<<"

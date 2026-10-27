@@ -32,3 +32,10 @@ add_executable(demo_05_rtp_stream
 target_link_libraries(demo_05_rtp_stream PRIVATE
     3gpp_core
 )
+
+add_executable(demo_06_diameter_s6a
+    demo_06_diameter_s6a.cpp
+)
+target_link_libraries(demo_06_diameter_s6a PRIVATE
+    3gpp_core
+)

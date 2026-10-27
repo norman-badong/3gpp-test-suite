@@ -23,6 +23,10 @@ add_library(3gpp_core STATIC
     rtp/RtpPacket.cpp
     rtp/RtcpPacket.cpp
     rtp/JitterEstimator.cpp
+    diameter/DiameterAvp.cpp
+    diameter/DiameterMessage.cpp
+    diameter/DiameterFactory.cpp
+    diameter/DiameterStack.cpp
 )
 
 target_include_directories(3gpp_core PUBLIC
