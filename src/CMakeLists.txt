@@ -31,6 +31,10 @@ add_library(3gpp_core STATIC
     lte_nas/NasIe.cpp
     lte_nas/EmmMessage.cpp
     lte_nas/EsmMessage.cpp
+    nr_nas/NrNasCommon.cpp
+    nr_nas/NrNasIe.cpp
+    nr_nas/GmmMessage.cpp
+    nr_nas/GsmMessage.cpp
 )
 
 target_include_directories(3gpp_core PUBLIC

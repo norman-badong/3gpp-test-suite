@@ -46,3 +46,10 @@ add_executable(demo_07_lte_nas
 target_link_libraries(demo_07_lte_nas PRIVATE
     3gpp_core
 )
+
+add_executable(demo_08_5g_registration
+    demo_08_5g_registration.cpp
+)
+target_link_libraries(demo_08_5g_registration PRIVATE
+    3gpp_core
+)

@@ -89,6 +89,11 @@ jobs:
           ./build/apps/demo_07_lte_nas
           tcpdump -r output_07_lte_nas.pcap -nv -c 4
 
+      - name: Execute Lesson 8 Demo (5G Registration 5GMM/5GSM)
+        run: |
+          ./build/apps/demo_08_5g_registration
+          tcpdump -r output_08_5g_registration.pcap -nv -c 4
+
       - name: Upload Wireshark PCAP Traces
         uses: actions/upload-artifact@v4
         if: matrix.compiler == 'gcc' && matrix.build_type == 'Debug'
@@ -102,4 +107,5 @@ jobs:
             output_05_rtp_stream.pcap
             output_06_diameter_s6a.pcap
             output_07_lte_nas.pcap
+            output_08_5g_registration.pcap
           retention-days: 14
