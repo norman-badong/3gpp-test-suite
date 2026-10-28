@@ -37,6 +37,10 @@ echo "=== Running Lesson 6 Demo App (Diameter S6a LTE EPC Authentication) ==="
 (cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_06_diameter_s6a")
 
 echo ""
+echo "=== Running Lesson 7 Demo App (LTE Attach / NAS Procedures) ==="
+(cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_07_lte_nas")
+
+echo ""
 echo "=== Verifying Generated PCAPs with tcpdump ==="
 echo "--- output_01_ip_echo.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_01_ip_echo.pcap" -c 2 -nv
@@ -50,5 +54,7 @@ echo "--- output_05_rtp_stream.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_05_rtp_stream.pcap" -c 4 -nv
 echo "--- output_06_diameter_s6a.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_06_diameter_s6a.pcap" -c 6 -nv
+echo "--- output_07_lte_nas.pcap ---"
+tcpdump -r "${PROJECT_ROOT}/output_07_lte_nas.pcap" -c 4 -nv
 echo ""
 echo ">>> All checks passed successfully! <<<"

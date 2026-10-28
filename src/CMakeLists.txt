@@ -27,6 +27,10 @@ add_library(3gpp_core STATIC
     diameter/DiameterMessage.cpp
     diameter/DiameterFactory.cpp
     diameter/DiameterStack.cpp
+    lte_nas/NasCommon.cpp
+    lte_nas/NasIe.cpp
+    lte_nas/EmmMessage.cpp
+    lte_nas/EsmMessage.cpp
 )
 
 target_include_directories(3gpp_core PUBLIC

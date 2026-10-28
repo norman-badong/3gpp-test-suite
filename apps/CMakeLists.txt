@@ -39,3 +39,10 @@ add_executable(demo_06_diameter_s6a
 target_link_libraries(demo_06_diameter_s6a PRIVATE
     3gpp_core
 )
+
+add_executable(demo_07_lte_nas
+    demo_07_lte_nas.cpp
+)
+target_link_libraries(demo_07_lte_nas PRIVATE
+    3gpp_core
+)
