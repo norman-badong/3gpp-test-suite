@@ -35,6 +35,8 @@ add_library(3gpp_core STATIC
     nr_nas/NrNasIe.cpp
     nr_nas/GmmMessage.cpp
     nr_nas/GsmMessage.cpp
+    rrc/Asn1Aper.cpp
+    rrc/RrcMessage.cpp
 )
 
 target_include_directories(3gpp_core PUBLIC

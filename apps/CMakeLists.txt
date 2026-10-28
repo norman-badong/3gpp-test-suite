@@ -53,3 +53,10 @@ add_executable(demo_08_5g_registration
 target_link_libraries(demo_08_5g_registration PRIVATE
     3gpp_core
 )
+
+add_executable(demo_09_rrc_signaling
+    demo_09_rrc_signaling.cpp
+)
+target_link_libraries(demo_09_rrc_signaling PRIVATE
+    3gpp_core
+)

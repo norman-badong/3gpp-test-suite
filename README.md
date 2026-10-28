@@ -48,7 +48,7 @@ Each lesson follows a strict **Two-Phase Strategy**:
 | **06** | **Diameter** | RFC 6733, RFC 4006, 3GPP TS 29.272 (S6a, Gx/Gy) | **Completed** |
 | **07** | **LTE Attach / NAS** | 3GPP TS 23.401, TS 24.301 (EMM & ESM) | **Completed** |
 | **08** | **5G Registration** | 3GPP TS 23.502, TS 24.501 (5GMM & 5GSM) | **Completed** |
-| **09** | **LTE / NR RRC** | 3GPP TS 36.331, TS 38.331 (ASN.1 APER Radio Signaling) | Planned |
+| **09** | **LTE / NR RRC** | 3GPP TS 36.331, TS 38.331 (ASN.1 APER Radio Signaling) | **Completed** |
 | **10** | **STUN/ICE + SOS** | RFC 5389, RFC 8445, RFC 6442 (VoWiFi NAT & 3GPP Emergency) | Planned |
 
 ---

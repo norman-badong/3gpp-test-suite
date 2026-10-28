@@ -45,6 +45,10 @@ echo "=== Running Lesson 8 Demo App (5G NR Registration / 5GMM & 5GSM) ==="
 (cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_08_5g_registration")
 
 echo ""
+echo "=== Running Lesson 9 Demo App (LTE & 5G NR RRC Signaling) ==="
+(cd "${PROJECT_ROOT}" && "${PROJECT_ROOT}/build/apps/demo_09_rrc_signaling")
+
+echo ""
 echo "=== Verifying Generated PCAPs with tcpdump ==="
 echo "--- output_01_ip_echo.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_01_ip_echo.pcap" -c 2 -nv
@@ -62,5 +66,7 @@ echo "--- output_07_lte_nas.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_07_lte_nas.pcap" -c 4 -nv
 echo "--- output_08_5g_registration.pcap ---"
 tcpdump -r "${PROJECT_ROOT}/output_08_5g_registration.pcap" -c 4 -nv
+echo "--- output_09_rrc.pcap ---"
+tcpdump -r "${PROJECT_ROOT}/output_09_rrc.pcap" -c 5 -nv
 echo ""
 echo ">>> All checks passed successfully! <<<"
