@@ -60,3 +60,10 @@ add_executable(demo_09_rrc_signaling
 target_link_libraries(demo_09_rrc_signaling PRIVATE
     3gpp_core
 )
+
+add_executable(demo_10_stun_ice
+    demo_10_stun_ice.cpp
+)
+target_link_libraries(demo_10_stun_ice PRIVATE
+    3gpp_core
+)

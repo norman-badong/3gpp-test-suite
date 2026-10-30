@@ -37,6 +37,10 @@ add_library(3gpp_core STATIC
     nr_nas/GsmMessage.cpp
     rrc/Asn1Aper.cpp
     rrc/RrcMessage.cpp
+    emergency/StunMessage.cpp
+    emergency/TurnMessage.cpp
+    emergency/IceAgent.cpp
+    emergency/EmergencySession.cpp
 )
 
 target_include_directories(3gpp_core PUBLIC

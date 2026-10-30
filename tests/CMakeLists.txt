@@ -8,6 +8,7 @@ add_executable(unit_tests
     test_07_lte_nas.cpp
     test_08_nr_nas.cpp
     test_09_rrc.cpp
+    test_10_emergency.cpp
 )
 
 target_link_libraries(unit_tests PRIVATE
